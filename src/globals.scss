@@ -1,0 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.screen {
+  @apply w-screen h-screen;
+  background-color: #252D33;
+}
