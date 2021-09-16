@@ -6,8 +6,31 @@ export let size = '10em';
 let uploading = false;
 let src;
 let files;
+let loading = true;
+let username = null;
+let avatar_url = null;
 const dispatch = createEventDispatcher();
 
+async function getProfile() {
+	try {
+		loading = true;
+		const user = supabase.auth.user();
+		let {
+			data,
+			error,
+			status
+		} = await supabase.from('profiles').select(`username, avatar_url`).eq('id', user.id).single();
+		if (error && status !== 406) throw error;
+		if (data) {
+			username = data.username;
+			avatar_url = data.avatar_url;
+		}
+	} catch (error) {
+		alert(error.message);
+	} finally {
+		loading = false;
+	}
+}
 
 async function uploadAvatar() {
 	try {
@@ -35,6 +58,23 @@ const deleteAvatar = async () => {
 	location.reload();
 };
 
+async function updateProfile() {
+	try {
+		loading = true;
+		const user = supabase.auth.user();
+		const updates = { id: user.id, username, avatar_url, updated_at: new Date() };
+		let { error } = await supabase.from('profiles').upsert(updates, {
+			returning: 'minimal'
+		});
+		if (error) throw error;
+	} catch (error) {
+		alert(error.message);
+	} finally {
+		location.reload();
+	}
+}
+
+
 const { data, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/${supabase.auth.user().id}`);
 
 </script>
@@ -47,14 +87,18 @@ const { data, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/$
 					<label class='button primary block cursor-pointer'
 								 for='single'>{uploading ? 'Loading...' : 'Upload'}
 					</label>
-					<button class='button' on:click={deleteAvatar} >{uploading ? 'Loading...' : 'Delete'}</button>
+					<button class='button' on:click={deleteAvatar}>{uploading ? 'Loading...' : 'Delete'}</button>
 				</div>
-				<div class='flex flex-col w-full items-center'>
 					{#if supabase.auth.user().email}
-						<input value={supabase.auth.user().email} disabled type='email'>
-						<input placeholder='Username' type='password'>
+						<form class='flex flex-col w-full items-center' on:submit|preventDefault={updateProfile} >
+							<input value={supabase.auth.user().email} disabled type='email'>
+							<input placeholder='Username' bind:value={username}>
+							<button class='input flex items-center justify-center' type='submit'>
+								{!loading ? 'Loading...' : 'Update'}
+							</button>
+						</form>
+
 					{/if}
-				</div>
 			</div>
 		</div>
 		<input
@@ -74,54 +118,56 @@ const { data, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/$
 </div>
 
 <style lang='scss'>
-    .all {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-    }
+  .all {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
 
-    img {
-        border-radius: 100%;
-        width: 50px;
-        height: 50px;
-    }
+  img {
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+  }
 
-    .button {
-      @apply rounded;
-      width: 110px;
-        height: 50px;
-        background-color: #2a2f32;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        margin: 5px;
-		}
+  .button {
+    @apply rounded;
+    width: 110px;
+    height: 50px;
+    background-color: #2a2f32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin: 5px;
+  }
 
-		.button:hover {
-      background-color: darken(#DC143C, 10);
-		}
+  .button:hover {
+    background-color: darken(#DC143C, 10);
+  }
 
-		label.button:hover {
-      background-color: darken(#2a2f32, 5);
-    }
+  label.button:hover {
+    background-color: darken(#2a2f32, 5);
+  }
 
-    button.button {
-        background-color: crimson;
-    }
+  button.button {
+    background-color: crimson;
+  }
 
-    input {
-      @apply rounded w-1/2 h-9 p-6 pl-4 m-3.5;
-      background: #3B4447;
-      color: #c1cbd4;
-    }
+  input, .input {
+    @apply rounded w-1/2 h-9 p-6 pl-4 m-3.5;
+    background: #3B4447;
+    color: #c1cbd4;
+  }
 
-    input:active {
-      background: linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
-    }
+  input:active, .input:active {
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  }
 
-    input[disabled] {
-      background: linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
-    }
+  input[disabled] {
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  }
+
+
 </style>

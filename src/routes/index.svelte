@@ -61,11 +61,6 @@
 
 </script>
 
-<svelte:head>
-	<title>
-		GalileoMessages | Home
-	</title>
-</svelte:head>
 {#if supabase.auth.user()?.email}
 	<Sidebar />
 {:else}

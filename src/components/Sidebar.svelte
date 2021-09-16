@@ -65,6 +65,11 @@
 	const { publicURL, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/${supabase.auth.user().id}`);
 </script>
 
+<svelte:head>
+	<title>
+		GalileoMessages | Home
+	</title>
+</svelte:head>
 {#if supabase.auth.user()?.email}
 	<div class='screen flex'>
 		<div class='sidebar drawer' class:shown={shown}>
