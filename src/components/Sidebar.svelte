@@ -143,6 +143,10 @@
 {/if}
 
 <style lang='scss'>
+  * {
+    transition: 0.5s;
+  }
+
   .sidebar {
     width: 18%;
     min-width: 300px;

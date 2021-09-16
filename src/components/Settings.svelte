@@ -10,6 +10,11 @@
 </div>
 
 <style>
+
+    * {
+        transition: 0.5s;
+    }
+
 	.settings {
 			width: 100%;
 			height: 100%;

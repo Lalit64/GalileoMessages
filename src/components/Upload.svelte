@@ -90,11 +90,11 @@ const { data, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/$
 					<button class='button' on:click={deleteAvatar}>{uploading ? 'Loading...' : 'Delete'}</button>
 				</div>
 					{#if supabase.auth.user().email}
-						<form class='flex flex-col w-full items-center' on:submit|preventDefault={updateProfile} >
+						<form class='flex flex-col w-full items-center' use:getProfile on:submit|preventDefault={updateProfile} >
 							<input value={supabase.auth.user().email} disabled type='email'>
 							<input placeholder='Username' bind:value={username}>
 							<button class='input flex items-center justify-center' type='submit'>
-								{!loading ? 'Loading...' : 'Update'}
+								{loading ? 'Loading...' : 'Update'}
 							</button>
 						</form>
 
@@ -118,6 +118,10 @@ const { data, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/$
 </div>
 
 <style lang='scss'>
+
+  * {
+    transition: 0.5s;
+  }
   .all {
     width: 100%;
     height: 100%;

@@ -80,11 +80,13 @@
 		{:else if type === "signup"}
 			<a href='/signin' >Have an Account? Sign In</a>
 		{/if}
-
 	</form>
 </div>
 
 <style lang='scss'>
+	button,input {
+		transition: 0.5s;
+	}
 
 	.inner-container {
 			background-color: #32373B;

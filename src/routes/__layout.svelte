@@ -7,8 +7,4 @@
 	@tailwind utilities;
 	@tailwind components;
 	@tailwind screens;
-
-	* {
-      transition: 0.5s;
-  }
 </style>
