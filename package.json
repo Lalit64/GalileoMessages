@@ -11,6 +11,11 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "devDependencies": {
+    "@smui/button": "^5.0.0-beta.1",
+    "@smui/drawer": "^5.0.0-beta.1",
+    "@smui/list": "^5.0.0-beta.1",
+    "@smui/menu-surface": "^5.0.0-beta.1",
+    "@smui/textfield": "^5.0.0-beta.1",
     "@sveltejs/kit": "next",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
@@ -31,6 +36,8 @@
   "type": "module",
   "dependencies": {
     "@supabase/supabase-js": "^1.22.6",
-    "@sveltejs/adapter-vercel": "^1.0.0-next.28"
+    "@sveltejs/adapter-vercel": "^1.0.0-next.28",
+    "svelte-material-ui": "^5.0.0-beta.1",
+    "svelte-popover": "^2.0.8"
   }
 }

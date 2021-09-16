@@ -22,7 +22,6 @@
 			return;
 		} finally {
 			loading = false;
-			success = "Nice Work"
 		}
 	}
 
@@ -36,9 +35,11 @@
 			return;
 		} finally {
 			loading = false;
-			success = "Check your email for the magic link!"
 		}
 	}
+
+
+
 </script>
 <svelte:head>
 	{#if type === "signin"}
