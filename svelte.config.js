@@ -1,5 +1,4 @@
 import preprocess from 'svelte-preprocess';
-import vercel from "@sveltejs/adapter-vercel"
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -12,8 +11,7 @@ const config = {
 		target: '#svelte',
 		vite: {
 			envPrefix: 'SVELTE_'
-		},
-		adapter: vercel()
+		}
 	}
 };
 

@@ -23,7 +23,7 @@ async function uploadAvatar() {
 		path = filePath;
 		dispatch('upload');
 	} catch (error) {
-		alert(error.message);
+		alert('Please Delete your profile before you change to a new one.');
 	} finally {
 		uploading = false;
 		location.reload();
@@ -42,11 +42,19 @@ const { data, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/$
 	{#if data.publicURL}
 		<div class='w-full h-full flex flex-col items-center'>
 			<img src={data.publicURL} style='height: {size}; width: {size};' class='mb-8 avatar ' />
-			<div class='flex'>
-				<label class='button primary block cursor-pointer'
-							 for='single'>{uploading ? 'Loading...' : 'Upload'}
-				</label>
-				<button class='button' on:click={deleteAvatar} >{uploading ? 'Loading...' : 'Delete'}</button>
+			<div class='flex flex-col items-center justify-center w-full'>
+				<div class='flex'>
+					<label class='button primary block cursor-pointer'
+								 for='single'>{uploading ? 'Loading...' : 'Upload'}
+					</label>
+					<button class='button' on:click={deleteAvatar} >{uploading ? 'Loading...' : 'Delete'}</button>
+				</div>
+				<div class='flex flex-col w-full items-center'>
+					{#if supabase.auth.user().email}
+						<input value={supabase.auth.user().email} disabled type='email'>
+						<input placeholder='Username' type='password'>
+					{/if}
+				</div>
 			</div>
 		</div>
 		<input
@@ -80,15 +88,16 @@ const { data, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/$
     }
 
     .button {
-        width: 100px;
+      @apply rounded;
+      width: 110px;
         height: 50px;
         background-color: #2a2f32;
-        border-radius: 7px;
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
-        margin: 5px;}
+        margin: 5px;
+		}
 
 		.button:hover {
       background-color: darken(#DC143C, 10);
@@ -100,5 +109,19 @@ const { data, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/$
 
     button.button {
         background-color: crimson;
+    }
+
+    input {
+      @apply rounded w-1/2 h-9 p-6 pl-4 m-3.5;
+      background: #3B4447;
+      color: #c1cbd4;
+    }
+
+    input:active {
+      background: linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+    }
+
+    input[disabled] {
+      background: linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
     }
 </style>

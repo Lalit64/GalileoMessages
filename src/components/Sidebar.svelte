@@ -81,7 +81,7 @@
 			<div class='header' use:getProfile on:submit|preventDefault={updateProfile}>
 				<div class='avatar'>
 					{#if publicURL }
-						<img src={publicURL} />
+						<img src={publicURL} on:click={() => shown=!shown} />
 					{:else}
 						<div class='MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault'>
 							<svg class='MuiSvgIcon-root MuiAvatar-fallback' width='30' height='30' fill='white' focusable='false'
@@ -254,7 +254,7 @@
   .close {
     width: 25px;
     height: 25px;
-    border-radius: 30%;
+    border-radius: 20%;
     background-color: rgba(255, 255, 255, 0.1);
     position: absolute;
     right: 20px;
