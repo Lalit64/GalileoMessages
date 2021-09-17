@@ -145,7 +145,6 @@
 		position: absolute;
 		width: 200px;
 		height: 200px;
-		top: 11.35%;
 		border-radius: 200px;
 	}
 
