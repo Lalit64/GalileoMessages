@@ -12,13 +12,12 @@
 <style>
 
     * {
-        transition: 0.5s;
+        transition: ease-in-out .5s;
     }
 
 	.settings {
 			width: 100%;
 			height: 100%;
-			padding-top: calc(60px + (65px));
 			display: flex;
 	}
 
@@ -35,4 +34,19 @@
 	input[disabled] {
       background: linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
 	}
+
+
+    .header {
+        padding: 10px 16px;
+        position: relative;
+        box-sizing: border-box;
+        display: flex;
+        flex: none;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 60px;
+        background: #2a2f32;
+        box-shadow: -1px 17px 2000px 0px rgba(0, 0, 0, 0.2);
+    }
 </style>

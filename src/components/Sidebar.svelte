@@ -7,7 +7,6 @@
 
 	let loading = true;
 	let username = null;
-	let website = null;
 	let avatar_url = null;
 	let isOpen = false;
 
@@ -72,21 +71,24 @@
 </svelte:head>
 {#if supabase.auth.user()?.email}
 	<div class='screen flex'>
-		<div class='sidebar drawer' class:shown={shown}>
-			<button class='close' on:click={() => {
+		<div class='sidebar drawer' class:shown={shown} >
+			<div style='width: 100%; height: 105px; background: #323739; display: flex; align-items: flex-end; padding: 10px;'>
+				<button class='close' on:click={() => {
 							shown=!shown;
 					}}>
-				<svg viewbox='0 0 40 40' width='11'>
-					<path class='close-x' d='M 10,10 L 30,30 M 30,10 L 10,30' />
-				</svg>
-			</button>
+					<svg viewBox="0 0 24 24" width="24" height="24" class=""><path fill="currentColor" d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"></path></svg>
+				</button>
+				<h1 style='width: 32px; height: 32px; align-items: center; justify-content: center; color: #e1e1e3; padding-left: 10px;'>
+					Settings
+				</h1>
+			</div>
 			<Settings />
 		</div>
 		<div class='sidebar'>
 			<div class='header' use:getProfile on:submit|preventDefault={updateProfile}>
 				<div class='avatar'>
 					{#if publicURL }
-						<img src={publicURL} on:click={() => shown=!shown} />
+						{#if publicURL === null} Loading... {:else }	<img src={publicURL} on:click={() => shown=!shown} />{/if}
 					{:else}
 						<div class='MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault'>
 							<svg class='MuiSvgIcon-root MuiAvatar-fallback' width='30' height='30' fill='white' focusable='false'
@@ -158,7 +160,6 @@
     width: 100%;
     height: 60px;
     background: #2a2f32;
-    z-index: 100;
     box-shadow: -1px 17px 2000px 0px rgba(0, 0, 0, 0.2);
 
     .avatar {
@@ -247,32 +248,24 @@
     min-width: 300px;
     box-shadow: 4px 17px 72px -24px rgba(0, 0, 0, 0.9);
     height: 100vh;
-    transition: .3s;
+    transition: .5s;
   }
 
   .shown {
 		left: 0;
+		transition: .5s;
   }
 
   .close {
-    width: 25px;
-    height: 25px;
-    border-radius: 20%;
-    background-color: rgba(255, 255, 255, 0.1);
-    position: absolute;
-    right: 20px;
-    top: 80px;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+      border-radius: 40px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.5s;
+      color: #b1b3b5;
 
-    .close-x {
-      stroke: white;
-      fill: transparent;
-      stroke-linecap: round;
-      stroke-width: 5;
-    }
 
     &:hover {
       backdrop-filter: brightness(80%);

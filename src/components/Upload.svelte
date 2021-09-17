@@ -1,5 +1,6 @@
 <script>  import { createEventDispatcher } from 'svelte';
 import { supabase } from '../supabase';
+import EditProfile from './EditProfile.svelte';
 
 export let path;
 export let size = '10em';
@@ -77,43 +78,33 @@ async function updateProfile() {
 
 const { data, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/${supabase.auth.user().id}`);
 
+let hide = false;
 </script>
 <div class='all'>
 	{#if data.publicURL}
-		<div class='w-full h-full flex flex-col items-center'>
-			<img src={data.publicURL} style='height: {size}; width: {size};' class='mb-8 avatar ' />
-			<div class='flex flex-col items-center justify-center w-full'>
-				<div class='flex'>
-					<label class='button primary block cursor-pointer'
-								 for='single'>{uploading ? 'Loading...' : 'Upload'}
-					</label>
-					<button class='button' on:click={deleteAvatar}>{uploading ? 'Loading...' : 'Delete'}</button>
+		<div class='w-full h-full flex flex-col items-center secondary drawer' use:getProfile class:hide={!hide} on:click={() => {
+				hide=!hide
+			}}>
+			<button class='profile' >
+				<img src={data.publicURL} class='mb-8 avatar '  alt=''/>
+				<div class='flex flex-col self-center relative bottom-1 text' style='height: 41px; width: 100%; color: #e1e2e3; font-size: 19px; text-align: left; margin-left: 10px;'>
+					<h1>
+						{#if username === null} Loading... {:else }	{username} {/if}
+					</h1>
+					<h6 style='color: #8d8f92; font-size: 15px;'>
+						{avatar_url}
+					</h6>
 				</div>
-					{#if supabase.auth.user().email}
-						<form class='flex flex-col w-full items-center' use:getProfile on:submit|preventDefault={updateProfile} >
-							<input value={supabase.auth.user().email} disabled type='email'>
-							<input placeholder='Username' bind:value={username}>
-							<button class='input flex items-center justify-center' type='submit'>
-								{loading ? 'Loading...' : 'Update'}
-							</button>
-						</form>
-
-					{/if}
-			</div>
+			</button>
 		</div>
-		<input
-			accept='image/*' bind:files disabled={uploading} id='single' on:change={uploadAvatar}
-			style='visibility: hidden; position:absolute;' type='file' />
-	{:else}
-		<div class='avatar' style='height: {size}; width: {size};'>
-			Please Upload an image to use
+		<div class:hide={hide} class='w-full h-full flex flex-col items-center secondary' >
+			<EditProfile />
+			<button class='close' on:click={() => {
+				hide=!hide
+			}} >
+				<svg viewBox="0 0 24 24" width="24" height="24" class=""><path fill="currentColor" d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"></path></svg>
+			</button>
 		</div>
-		<label class='button primary block'
-					 for='single'>{uploading ? 'Uploading ...' : 'Upload'}
-		</label>
-		<input
-			accept='image/*' bind:files disabled={uploading} id='single' on:change={uploadAvatar}
-			style='visibility: hidden; position:absolute;' type='file' />
 	{/if}
 </div>
 
@@ -129,10 +120,20 @@ const { data, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/$
     justify-content: center;
   }
 
+	.profile {
+		width: 100%;
+		height: 115px;
+		display: flex;
+		padding: 15px;
+		&:hover{
+			background: #2d3134;
+		}
+	}
+
   img {
     border-radius: 100%;
-    width: 50px;
-    height: 50px;
+    width: 82px;
+    height: 82px;
   }
 
   .button {
@@ -173,5 +174,43 @@ const { data, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/$
     background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
   }
 
+  .close {
+    border-radius: 40px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 10px;
+    top: 120px;
+    transition: 0.5s;
+    color: #b1b3b5;
 
+    &:hover {
+      backdrop-filter: brightness(80%);
+    }
+
+    &:active {
+      backdrop-filter: brightness(60%);
+    }
+  }
+
+  .drawer {
+    position: absolute;
+    z-index: 1;
+		background: #131c21;
+    width: 100%;
+    left: -200%;
+    min-width: 300px;
+    box-shadow: 4px 17px 72px -24px rgba(0, 0, 0, 0.9);
+    height: 100vh;
+    transition: .5s;
+  }
+
+
+  .hide {
+    left: 0;
+    transition: .5s;
+  }
 </style>
