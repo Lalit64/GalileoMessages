@@ -10,6 +10,7 @@ let files;
 let loading = true;
 let username = null;
 let avatar_url = null;
+let moddedAbout;
 const dispatch = createEventDispatcher();
 
 async function getProfile() {
@@ -30,6 +31,11 @@ async function getProfile() {
 		alert(error.message);
 	} finally {
 		loading = false;
+		if(avatar_url.length >= 36) {
+			moddedAbout = avatar_url.substring(0, 36).concat(' ...')
+		} else {
+			moddedAbout = avatar_url
+		}
 	}
 }
 
@@ -86,13 +92,14 @@ let hide = false;
 				hide=!hide
 			}}>
 			<button class='profile' >
-				<img src={data.publicURL} class='mb-8 avatar '  alt=''/>
-				<div class='flex flex-col self-center relative bottom-1 text' style='height: 41px; width: 100%; color: #e1e2e3; font-size: 19px; text-align: left; margin-left: 10px;'>
+				<img src={data.publicURL} class='mb-8 avatar'  alt=''/>
+				<div class='flex flex-col self-center relative bottom-1' style='height: 41px; width: 80%; color: #e1e2e3; font-size: 19px; text-align: left; margin-left: 10px;'>
 					<h1>
 						{#if username === null} Loading... {:else }	{username} {/if}
 					</h1>
 					<h6 style='color: #8d8f92; font-size: 15px;'>
-						{avatar_url}
+						{#if avatar_url === null} Loading... {:else }	{moddedAbout}{/if}
+
 					</h6>
 				</div>
 			</button>
@@ -213,4 +220,8 @@ let hide = false;
     left: 0;
     transition: .5s;
   }
+
+	.secondary {
+		height: calc(100vh - 105px);
+	}
 </style>

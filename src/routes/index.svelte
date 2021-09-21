@@ -3,6 +3,7 @@
 	import Auth from '../components/Auth.svelte';
 	import {user} from '../sessionStore';
 	import Sidebar from '../components/Sidebar.svelte';
+	import CustomMenu from '../components/Menu/CustomMenu.svelte';
 
 	let loading = true;
 	let username = null;
@@ -60,6 +61,8 @@
 	}
 
 </script>
+
+<CustomMenu />
 
 {#if supabase.auth.user()?.email}
 	<Sidebar />

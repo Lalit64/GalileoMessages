@@ -51,14 +51,10 @@
 		}
 	}
 
-	const deleteAvatar = async () => {
-		await supabase.storage.from('avatars').remove([`avatars/${supabase.auth.user().id}`]);
-		location.reload();
-	};
-
 	async function uploadAvatar() {
 		try {
 			uploading = true;
+			await supabase.storage.from('avatars').remove([`avatars/${supabase.auth.user().id}`]);
 			if (!files || files.length === 0) {
 				throw new Error('You must select an image to upload.');
 			}
@@ -84,14 +80,11 @@
 <div class='w-full h-full flex flex-col items-center p-9' use:getProfile>
 	<div class='upload'>
 		<form>
-			<input accept='image/*' class='file' bind:files disabled={uploading} id='single' on:change={uploadAvatar}
+			<input accept='image/*' tabindex='1' class='file' bind:files disabled={uploading} id='single' on:change={uploadAvatar}
 						 style='border-bottom: 0;' type='file' />
 		</form>
 		<img class='mb-1 avatar' src={data.publicURL} />
 	</div>
-	<button class='w-1/2 mb-16 h-10 mt-10 rounded' on:click={deleteAvatar} style='background: crimson;' type='submit'>
-		Delete Avatar
-	</button>
 	<div class='w-full'>
 		<form on:submit|preventDefault={updateProfile}>
 			<h1>
