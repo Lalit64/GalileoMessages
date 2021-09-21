@@ -29,14 +29,6 @@
 	<Menu {...pos} on:click={closeMenu} on:clickoutside={closeMenu}>
 		<div class='menutop mdc-menu-surface mdc-menu-surface--open mdc-menu-surface--is-open-below' style='transform-origin: top center 0px;'>
 			<div class='menu pt-2 pb-2 flex flex-col s-G1Ow7ZVQ9xTC'>
-				<button on:click={() => {
-					let body = document.body.style
-					body.height = "105vh"
-					body.width = "105vw"
-
-				}} class='list'>
-					Zoom In
-				</button>
 				<button on:click={() => window.history.go(-1)} class='list'>
 					Back
 				</button>
@@ -80,5 +72,9 @@
 
     .list:active {
         background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .mdc-menu-surface {
+        background-color: #2a2f32 !important;
     }
 </style>
