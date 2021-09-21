@@ -1,7 +1,9 @@
 <script lang='ts'>
 	import { supabase } from '../supabase';
 	import MenuSurface, { MenuSurfaceComponentDev } from '@smui/menu-surface';
+	import Menu from './Menu/Menu.svelte';
 	import Settings from './Settings.svelte';
+	import CustomMenu from './Menu/CustomMenu.svelte';
 
 	let surface: MenuSurfaceComponentDev;
 
@@ -61,7 +63,25 @@
 	}
 
 	let shown = false;
+
 	const { publicURL, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/${supabase.auth.user().id}`);
+	let pos = { x: 0, y: 0 };
+	let showMenu = false;
+
+
+	async function onRightClick(e) {
+		if (showMenu) {
+			showMenu = false;
+			await new Promise(res => setTimeout(res, 100));
+		}
+
+		pos = { x: e.clientX, y: e.clientY };
+		showMenu = true;
+	}
+
+	function closeMenu() {
+		showMenu = false;
+	}
 </script>
 
 <svelte:head>
@@ -69,16 +89,36 @@
 		GalileoMessages | Home
 	</title>
 </svelte:head>
+
+<svelte:body on:contextmenu|preventDefault={onRightClick} />
+
+{#if showMenu}
+	<Menu {...pos} on:click={closeMenu} on:clickoutside={closeMenu}>
+		<CustomMenu>
+			<button on:click={() => {
+					shown=!shown;
+					console.log(shown)
+				}} class='list'>
+				Settings
+			</button>
+		</CustomMenu>
+	</Menu>
+{/if}
+
 {#if supabase.auth.user()?.email}
 	<div class='screen flex'>
-		<div class='sidebar drawer' class:shown={shown} >
-			<div style='width: 100%; height: 105px; background: #323739; display: flex; align-items: flex-end; padding: 10px;'>
+		<div class='sidebar drawer' class:shown={shown}>
+			<div
+				style='width: 100%; height: 105px; background: #323739; display: flex; align-items: flex-end; padding: 10px;'>
 				<button class='close' on:click={() => {
 							shown=!shown;
 					}}>
-					<svg viewBox="0 0 24 24" width="24" height="24" class=""><path fill="currentColor" d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"></path></svg>
+					<svg viewBox='0 0 24 24' width='24' height='24' class=''>
+						<path fill='currentColor' d='M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z'></path>
+					</svg>
 				</button>
-				<h1 style='width: 32px; height: 32px; align-items: center; justify-content: center; color: #e1e1e3; padding-left: 10px;'>
+				<h1
+					style='width: 32px; height: 32px; align-items: center; justify-content: center; color: #e1e1e3; padding-left: 10px;'>
 					Settings
 				</h1>
 			</div>
@@ -88,7 +128,7 @@
 			<div class='header' use:getProfile on:submit|preventDefault={updateProfile}>
 				<div class='avatar'>
 					{#if publicURL }
-						{#if publicURL === null} Loading... {:else }	<img src={publicURL} on:click={() => shown=!shown} />{/if}
+						{#if publicURL === null} Loading...{:else }  <img src={publicURL} on:click={() => shown=!shown} />{/if}
 					{:else}
 						<div class='MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault'>
 							<svg class='MuiSvgIcon-root MuiAvatar-fallback' width='30' height='30' fill='white' focusable='false'
@@ -104,7 +144,10 @@
 
 					</button>
 					<button class='btn'>
-						<svg viewBox="0 0 24 24" width="24" height="24" class=""><path fill="currentColor" d="M19.005 3.175H4.674C3.642 3.175 3 3.789 3 4.821V21.02l3.544-3.514h12.461c1.033 0 2.064-1.06 2.064-2.093V4.821c-.001-1.032-1.032-1.646-2.064-1.646zm-4.989 9.869H7.041V11.1h6.975v1.944zm3-4H7.041V7.1h9.975v1.944z"></path></svg>
+						<svg viewBox='0 0 24 24' width='24' height='24' class=''>
+							<path fill='currentColor'
+										d='M19.005 3.175H4.674C3.642 3.175 3 3.789 3 4.821V21.02l3.544-3.514h12.461c1.033 0 2.064-1.06 2.064-2.093V4.821c-.001-1.032-1.032-1.646-2.064-1.646zm-4.989 9.869H7.041V11.1h6.975v1.944zm3-4H7.041V7.1h9.975v1.944z'></path>
+						</svg>
 					</button>
 
 					<button class='btn' on:click={() => surface.setOpen(!isOpen)}>
@@ -126,6 +169,11 @@
 									console.log(shown)
 							}}>Settings
 							</button>
+							<button on:click={() => {
+								navigator.clipboard.writeText(supabase.auth.user().id)
+							}} class='list'>
+								Copy User ID
+							</button>
 							<button class='list l' on:click={() => {
 								supabase.auth.signOut().then(() => {location.reload()})
 							}}>Log out
@@ -137,6 +185,7 @@
 		</div>
 	</div>
 {/if}
+
 
 <style lang='scss'>
   * {
@@ -223,7 +272,7 @@
 
   .list {
     height: 40px;
-    width: 150px;
+    width: 200px;
     display: flex;
     align-items: center;
     justify-content: left;
@@ -244,7 +293,7 @@
     position: absolute;
     z-index: 1;
     width: 18%;
-		left: -200%;
+    left: -200%;
     min-width: 300px;
     box-shadow: 4px 17px 72px -24px rgba(0, 0, 0, 0.9);
     height: 100vh;
@@ -252,19 +301,19 @@
   }
 
   .shown {
-		left: 0;
-		transition: .5s;
+    left: 0;
+    transition: .5s;
   }
 
   .close {
-      border-radius: 40px;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: 0.5s;
-      color: #b1b3b5;
+    border-radius: 40px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+    color: #b1b3b5;
 
 
     &:hover {
@@ -276,14 +325,15 @@
     }
   }
 
-	.btn[disabled] {
-		cursor: default;
-		&:hover {
+  .btn[disabled] {
+    cursor: default;
+
+    &:hover {
       backdrop-filter: brightness(100%);
     }
 
-		&:active{
+    &:active {
       backdrop-filter: brightness(100%);
     }
-	}
+  }
 </style>

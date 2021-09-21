@@ -1,6 +1,6 @@
 <script>
 	import { onMount, setContext, createEventDispatcher } from 'svelte';
-	import { fade } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
 
 	export let x;
 	export let y;
@@ -33,6 +33,6 @@
 
 <svelte:body on:click={onPageClick} />
 
-<div transition:fade={{ duration: 100 }} bind:this={menuEl} style="top: {y}px; left: {x}px;">
+<div transition:fly={{ duration: 150 }} bind:this={menuEl} style="top: {y}px; left: {x}px;">
 	<slot />
 </div>

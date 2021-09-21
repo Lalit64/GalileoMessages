@@ -135,6 +135,9 @@ let hide = false;
 		&:hover{
 			background: #2d3134;
 		}
+		&:active {
+			background: #353a3d;
+		}
 	}
 
   img {

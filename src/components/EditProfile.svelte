@@ -80,7 +80,9 @@
 <div class='w-full h-full flex flex-col items-center p-9' use:getProfile>
 	<div class='upload'>
 		<form>
-			<input accept='image/*' tabindex='1' class='file' bind:files disabled={uploading} id='single' on:change={uploadAvatar}
+			<div class="_3D1Iu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style='position: absolute; fill: currentColor; left: 65px; top: -30px;' ><path d="M12 9c-1.626 0-3 1.374-3 3s1.374 3 3 3 3-1.374 3-3-1.374-3-3-3z"></path><path d="M20 5h-2.586l-2.707-2.707A.996.996 0 0 0 14 2h-4a.996.996 0 0 0-.707.293L6.586 5H4c-1.103 0-2 .897-2 2v11c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zm-8 12c-2.71 0-5-2.29-5-5s2.29-5 5-5 5 2.29 5 5-2.29 5-5 5z"></path></svg>
+				Change profile photo</div>
+			<input accept='image/*'  tabindex='1' class='file' bind:files disabled={uploading} id='single' on:change={uploadAvatar}
 						 style='border-bottom: 0;' type='file' />
 		</form>
 		<img class='mb-1 avatar' src={data.publicURL} />
@@ -103,7 +105,7 @@
 </div>
 <style lang='scss'>
   * {
-    transition: .5s;
+    transition: 0.5s;
   }
 
   h1 {
@@ -127,11 +129,39 @@
   button {
     color: white;
     background: #009688;
+		&:hover {
+			background-color: darken(#009688, 5);
+		}
+		&:active {
+      background-color: darken(#009688, 7);
+    }
+  }
+
+
+  ._3D1Iu {
+    display: none;
   }
 
   .upload {
     margin-top: 10px;
     margin-bottom: 10px;
+		display: flex;
+		justify-content: center;
+		&:hover {
+      ._3D1Iu {
+				display: flex;
+        position: absolute;
+        color: white;
+        margin-top: 100px;
+        margin-left: 20px;
+        z-index: 1000000;
+      }
+
+			._3D1Iu:hover{
+				color: transparent;
+				fill: none !important;
+			}
+    }
   }
 
 	.file {
@@ -141,14 +171,23 @@
 		border-radius: 200px;
 	}
 
+
 	::file-selector-button {
 		width: 105%;
 		height: 105%;
+		margin-left: -2px;
+		margin-top: -2px;
 		color: transparent;
     background: transparent;
+		transition: background-color 0.5s;
 		&:hover {
-			color: white;
-			background: rgba(0,0,0,0.3);
+			color: rgba(0,0,0,0);
+			background-color: rgba(0,0,0,0.3);
+		}
+		&:active {
+      background-color: rgba(0,0,0,0.4);
 		}
   }
+
+
 </style>
