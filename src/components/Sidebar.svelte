@@ -5,6 +5,7 @@
 	import Settings from './Settings.svelte';
 	import CustomMenu from './Menu/CustomMenu.svelte';
 	import Search from './Search.svelte';
+	import MenuDivider from './Menu/MenuDivider.svelte';
 
 	let surface: MenuSurfaceComponentDev;
 
@@ -83,6 +84,7 @@
 	function closeMenu() {
 		showMenu = false;
 	}
+
 </script>
 
 <svelte:head>
@@ -99,7 +101,7 @@
 			<button on:click={() => {
 					shown=!shown;
 					console.log(shown)
-				}} class='list'>
+				}} class='list' style='width: 100%;'>
 				Settings
 			</button>
 		</CustomMenu>
@@ -157,7 +159,7 @@
 										d='M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z'></path>
 						</svg>
 					</button>
-					<MenuSurface bind:this={surface} class='menutop' anchorCorner='BOTTOM_LEFT'>
+					<MenuSurface bind:this={surface} class='menutop' style='position: absolute; margin-left: 0px;' anchorCorner='BOTTOM_LEFT'>
 						<div
 							class='menu pt-2 pb-2 flex flex-col'
 						>
@@ -170,11 +172,7 @@
 									console.log(shown)
 							}}>Settings
 							</button>
-							<button on:click={() => {
-								navigator.clipboard.writeText(supabase.auth.user().id)
-							}} class='list'>
-								Copy User ID
-							</button>
+							<MenuDivider />
 							<button class='list l' on:click={() => {
 								supabase.auth.signOut().then(() => {location.reload()})
 							}}>Log out
@@ -274,7 +272,7 @@
 
   .list {
     height: 40px;
-    width: 200px;
+    width: 150px;
     display: flex;
     align-items: center;
     justify-content: left;
