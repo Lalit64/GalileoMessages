@@ -22,6 +22,7 @@
 			alert(error.message)
 		} finally {
 			loading = false;
+			location.reload()
 		}
 	}
 
@@ -35,6 +36,7 @@
 			alert(error.message)
 		} finally {
 			loading = false;
+			location.reload()
 		}
 	}
 
