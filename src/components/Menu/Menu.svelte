@@ -1,11 +1,10 @@
 <script>
-	import { onMount, setContext, createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import { fly } from 'svelte/transition';
 
 	export let x;
 	export let y;
 
-	// whenever x and y is changed, restrict box to be within bounds
 	$: (() => {
 		if (!menuEl) return;
 
@@ -17,6 +16,7 @@
 	const dispatch = createEventDispatcher();
 
 	let menuEl;
+
 	function onPageClick(e) {
 		if (e.target === menuEl || menuEl.contains(e.target)) return;
 		dispatch('clickoutside');

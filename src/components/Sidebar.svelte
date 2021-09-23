@@ -4,6 +4,7 @@
 	import Menu from './Menu/Menu.svelte';
 	import Settings from './Settings.svelte';
 	import CustomMenu from './Menu/CustomMenu.svelte';
+	import Search from './Search.svelte';
 
 	let surface: MenuSurfaceComponentDev;
 
@@ -182,6 +183,7 @@
 					</MenuSurface>
 				</div>
 			</div>
+			<Search />
 		</div>
 	</div>
 {/if}
