@@ -38,6 +38,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^1.22.6",
     "@sveltejs/adapter-vercel": "^1.0.0-next.28",
+    "axios": "^0.21.4",
     "svelte-material-ui": "^5.0.0-beta.1",
     "svelte-popover": "^2.0.8"
   }

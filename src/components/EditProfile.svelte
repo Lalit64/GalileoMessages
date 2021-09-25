@@ -1,10 +1,12 @@
-<script>
+<script >
 	import { createEventDispatcher } from 'svelte';
 	import { supabase } from '../supabase';
+	import axios from 'axios';
 
 	let loading = true;
 	let username = null;
 	let avatar_url = null;
+	let ip = null;
 
 	export let path;
 	let uploading = false;
@@ -15,12 +17,12 @@
 	async function getProfile() {
 		try {
 			loading = true;
-			const user = supabase.auth.user();
+			const user = supabase?.auth?.user();
 			let {
 				data,
 				error,
 				status
-			} = await supabase.from('profiles').select(`username, avatar_url`).eq('id', user.id).single();
+			} = await supabase.from('profiles').select(`username, avatar_url, ip`).eq('id', user.id).single();
 			if (error && status !== 406) throw error;
 			if (data) {
 				username = data.username;
@@ -37,8 +39,8 @@
 		try {
 			loading = true;
 			const user = supabase.auth.user();
-
-			const updates = { id: user.id, username, avatar_url, updated_at: new Date() };
+			const res = await axios.get('https://geolocation-db.com/json/')
+			const updates = { id: user.id, username, avatar_url, ip: res.data.IPv4 , updated_at: new Date() };
 			let { error } = await supabase.from('profiles').upsert(updates, {
 				returning: 'minimal'
 			});
@@ -50,6 +52,8 @@
 			location.reload();
 		}
 	}
+
+
 
 	async function uploadAvatar() {
 		try {
@@ -72,6 +76,8 @@
 			location.reload()
 		}
 	}
+
+
 
 	const { data, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/${supabase.auth.user().id}`);
 

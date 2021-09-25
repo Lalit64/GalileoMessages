@@ -9,10 +9,6 @@
 	let loading = false;
 	let success = "";
 
-	async function googleIn() {  const { user, session, error } = await supabase.auth.signIn({provider: 'google'});}
-
-	async function githubIn() {  const { user, session, error } = await supabase.auth.signIn({provider: 'github'});}
-
 	const signIn = async () => {
 		try {
 			loading = true;
@@ -25,6 +21,11 @@
 			location.reload()
 		}
 	}
+
+	async function googleIn() {  const { user, session, error } = await supabase.auth.signIn({provider: 'google'});}
+
+	async function githubIn() {  const { user, session, error } = await supabase.auth.signIn({provider: 'github'});}
+
 
 	const signUp = async () => {
 		try {

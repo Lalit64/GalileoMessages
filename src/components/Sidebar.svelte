@@ -6,12 +6,14 @@
 	import CustomMenu from './Menu/CustomMenu.svelte';
 	import Search from './Search.svelte';
 	import MenuDivider from './Menu/MenuDivider.svelte';
+	import axios from 'axios'
 
 	let surface: MenuSurfaceComponentDev;
 
 	let loading = true;
 	let username = null;
 	let avatar_url = null;
+	let ip = null;
 	let isOpen = false;
 
 	async function getProfile() {
@@ -22,7 +24,7 @@
 				data,
 				error,
 				status
-			} = await supabase.from('profiles').select(`username, avatar_url`).eq('id', user.id).single();
+			} = await supabase.from('profiles').select(`username, avatar_url, ip`).eq('id', user.id).single();
 			if (error && status !== 406) throw error;
 			if (data) {
 				username = data.username;
@@ -40,7 +42,7 @@
 		try {
 			loading = true;
 			const user = supabase.auth.user();
-			const updates = { id: user.id, username, avatar_url, updated_at: new Date() };
+			const updates = { id: user.id, username, avatar_url, ip, updated_at: new Date() };
 			let { error } = await supabase.from('profiles').upsert(updates, {
 				returning: 'minimal'
 			});
@@ -163,7 +165,7 @@
 						<div
 							class='menu pt-2 pb-2 flex flex-col'
 						>
-							<button class='list'>
+							<button class='list'  >
 								New Chat
 							</button>
 							<button class='list' id='settings' on:click={() => {
