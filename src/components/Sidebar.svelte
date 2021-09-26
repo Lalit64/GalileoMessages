@@ -98,16 +98,14 @@
 <svelte:body on:contextmenu|preventDefault={onRightClick} />
 
 {#if showMenu}
-	<Menu {...pos} on:click={closeMenu} on:clickoutside={closeMenu}>
-		<CustomMenu>
+	<CustomMenu {...pos} close={closeMenu} on:click={closeMenu} on:clickoutside={closeMenu}>
 			<button on:click={() => {
 					shown=!shown;
 					console.log(shown)
 				}} class='list' style='width: 100%;'>
 				Settings
 			</button>
-		</CustomMenu>
-	</Menu>
+	</CustomMenu>
 {/if}
 
 {#if supabase.auth.user()?.email}

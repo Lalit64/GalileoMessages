@@ -88,10 +88,10 @@ let hide = false;
 </script>
 <div class='all'>
 	{#if data.publicURL}
-		<div class='w-full h-full flex flex-col items-center secondary drawer' use:getProfile class:hide={!hide} on:click={() => {
+		<div class='w-full h-full flex flex-col items-center secondary drawer' use:getProfile class:hide={!hide} >
+			<button class='profile' on:click={() => {
 				hide=!hide
-			}}>
-			<button class='profile' >
+			}} >
 				<img src={data.publicURL} class='mb-8 avatar'  alt=''/>
 				<div class='flex flex-col self-center relative bottom-1' style='height: 41px; width: 80%; color: #e1e2e3; font-size: 19px; text-align: left; margin-left: 10px;'>
 					<h1>

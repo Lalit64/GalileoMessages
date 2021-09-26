@@ -15,7 +15,7 @@
 					loading = true;
 					const user = supabase.auth.user();
 					const res = await axios.get('https://geolocation-db.com/json/')
-					const updates = { ip: res.data.IPv4 };
+					const updates = { id: user.id, ip: res.data.IPv4, country_code: res.data.country_code };
 					let { error } = await supabase.from('profiles').upsert(updates, {
 						returning: 'minimal'
 					});
@@ -35,7 +35,7 @@
 </script>
 
 
-{#if supabase.auth.user()?.email}
+{#if supabase?.auth?.user()}
 	<Sidebar />
 {:else}
 	<Auth type='signin' />
