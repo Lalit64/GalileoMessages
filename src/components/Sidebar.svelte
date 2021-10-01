@@ -1,12 +1,12 @@
 <script lang='ts'>
 	import { supabase } from '../supabase';
 	import MenuSurface, { MenuSurfaceComponentDev } from '@smui/menu-surface';
-	import Menu from './Menu/Menu.svelte';
 	import Settings from './Settings.svelte';
 	import CustomMenu from './Menu/CustomMenu.svelte';
 	import Search from './Search.svelte';
 	import MenuDivider from './Menu/MenuDivider.svelte';
-	import axios from 'axios'
+	import Channels from './Channels/Channels.svelte';
+	import { addChannel } from '../sessionStore';
 
 	let surface: MenuSurfaceComponentDev;
 
@@ -24,7 +24,7 @@
 				data,
 				error,
 				status
-			} = await supabase.from('profiles').select(`username, avatar_url, ip`).eq('id', user.id).single();
+			} = await supabase.from('profiles').select(`username, avatar_url, ip`).eq('id', user?.id).single();
 			if (error && status !== 406) throw error;
 			if (data) {
 				username = data.username;
@@ -41,7 +41,7 @@
 	async function updateProfile() {
 		try {
 			loading = true;
-			const user = supabase.auth.user();
+			const user = supabase?.auth?.user();
 			const updates = { id: user.id, username, avatar_url, ip, updated_at: new Date() };
 			let { error } = await supabase.from('profiles').upsert(updates, {
 				returning: 'minimal'
@@ -68,7 +68,7 @@
 
 	let shown = false;
 
-	const { publicURL, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/${supabase.auth.user().id}`);
+	const { publicURL, error } = supabase.storage.from('avatars').getPublicUrl(`avatars/${supabase?.auth?.user()?.id}`);
 	let pos = { x: 0, y: 0 };
 	let showMenu = false;
 
@@ -87,6 +87,28 @@
 		showMenu = false;
 	}
 
+
+	const slugify = (text) => {
+		return text
+			.toString()
+			.toLowerCase()
+			.replace(/\s+/g, '-') // Replace spaces with -
+			.replace(/[^\w-]+/g, '') // Remove all non-word chars
+			.replace(/--+/g, '-') // Replace multiple - with single -
+			.replace(/^-+/, '') // Trim - from start of text
+			.replace(/-+$/, ''); // Trim - from end of text
+	};
+
+
+	const newChannel = async () => {
+		const slug = prompt('Please enter the name of the Channel you wish to create')
+		if (slug) {
+				await addChannel(slugify(slug), supabase.auth.user().id).then(() =>{
+				location.reload()
+			})
+		}
+	}
+
 </script>
 
 <svelte:head>
@@ -99,89 +121,96 @@
 
 {#if showMenu}
 	<CustomMenu {...pos} close={closeMenu} on:click={closeMenu} on:clickoutside={closeMenu}>
-			<button on:click={() => {
+		<button on:click={() => {
 					shown=!shown;
 					console.log(shown)
 				}} class='list' style='width: 100%;'>
-				Settings
-			</button>
+			Settings
+		</button>
 	</CustomMenu>
 {/if}
 
 {#if supabase.auth.user()?.email}
-	<div class='screen flex'>
-		<div class='sidebar drawer' class:shown={shown}>
-			<div
-				style='width: 100%; height: 105px; background: #323739; display: flex; align-items: flex-end; padding: 10px;'>
-				<button class='close' on:click={() => {
+	<div class='sidebar drawer' class:shown={shown}>
+		<div
+			style='width: 100%; height: 105px; background: #323739; display: flex; align-items: flex-end; padding: 10px;'>
+			<button class='close' on:click={() => {
 							shown=!shown;
 					}}>
+				<svg viewBox='0 0 24 24' width='24' height='24' class=''>
+					<path fill='currentColor' d='M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z'></path>
+				</svg>
+			</button>
+			<h1
+				style='width: 32px; height: 32px; align-items: center; justify-content: center; color: #e1e1e3; padding-left: 10px;'>
+				Settings
+			</h1>
+		</div>
+		<Settings />
+	</div>
+	<div class='sidebar'>
+		<div class='header' use:getProfile on:submit|preventDefault={updateProfile}>
+			<div class='avatar'>
+				{#if publicURL }
+					{#if publicURL === null} Loading...{:else }  <img src={publicURL} on:click={() => shown=!shown} />{/if}
+				{:else}
+					<div class='MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault'>
+						<svg class='MuiSvgIcon-root MuiAvatar-fallback' width='30' height='30' fill='white' focusable='false'
+								 viewBox='0 0 24 24' aria-hidden='true'>
+							<path
+								d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'></path>
+						</svg>
+					</div>
+				{/if}
+			</div>
+			<div class='icons items-center absolute right-4 w-2/6 h-full flex justify-between'>
+				<button class='btn' disabled>
+
+				</button>
+				<button class='btn' on:click={() => {
+					newChannel()
+				}} >
 					<svg viewBox='0 0 24 24' width='24' height='24' class=''>
-						<path fill='currentColor' d='M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z'></path>
+						<path fill='currentColor'
+									d='M19.005 3.175H4.674C3.642 3.175 3 3.789 3 4.821V21.02l3.544-3.514h12.461c1.033 0 2.064-1.06 2.064-2.093V4.821c-.001-1.032-1.032-1.646-2.064-1.646zm-4.989 9.869H7.041V11.1h6.975v1.944zm3-4H7.041V7.1h9.975v1.944z'></path>
 					</svg>
 				</button>
-				<h1
-					style='width: 32px; height: 32px; align-items: center; justify-content: center; color: #e1e1e3; padding-left: 10px;'>
-					Settings
-				</h1>
-			</div>
-			<Settings />
-		</div>
-		<div class='sidebar'>
-			<div class='header' use:getProfile on:submit|preventDefault={updateProfile}>
-				<div class='avatar'>
-					{#if publicURL }
-						{#if publicURL === null} Loading...{:else }  <img src={publicURL} on:click={() => shown=!shown} />{/if}
-					{:else}
-						<div class='MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault'>
-							<svg class='MuiSvgIcon-root MuiAvatar-fallback' width='30' height='30' fill='white' focusable='false'
-									 viewBox='0 0 24 24' aria-hidden='true'>
-								<path
-									d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'></path>
-							</svg>
-						</div>
-					{/if}
-				</div>
-				<div class='icons items-center absolute right-4 w-2/6 h-full flex justify-between'>
-					<button class='btn' disabled>
 
-					</button>
-					<button class='btn'>
-						<svg viewBox='0 0 24 24' width='24' height='24' class=''>
-							<path fill='currentColor'
-										d='M19.005 3.175H4.674C3.642 3.175 3 3.789 3 4.821V21.02l3.544-3.514h12.461c1.033 0 2.064-1.06 2.064-2.093V4.821c-.001-1.032-1.032-1.646-2.064-1.646zm-4.989 9.869H7.041V11.1h6.975v1.944zm3-4H7.041V7.1h9.975v1.944z'></path>
-						</svg>
-					</button>
-
-					<button class='btn' on:click={() => surface.setOpen(!isOpen)}>
-						<svg viewBox='0 0 24 24' width='24' height='24' class=''>
-							<path fill='currentColor'
-										d='M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z'></path>
-						</svg>
-					</button>
-					<MenuSurface bind:this={surface} class='menutop' style='position: absolute; margin-left: 0px;' anchorCorner='BOTTOM_LEFT'>
-						<div
-							class='menu pt-2 pb-2 flex flex-col'
-						>
-							<button class='list'  >
-								New Chat
-							</button>
-							<button class='list' id='settings' on:click={() => {
+				<button class='btn' on:click={() => surface.setOpen(!isOpen)}>
+					<svg viewBox='0 0 24 24' width='24' height='24' class=''>
+						<path fill='currentColor'
+									d='M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z'></path>
+					</svg>
+				</button>
+				<MenuSurface bind:this={surface} class='menutop' style='position: absolute; margin-left: 0px;'
+										 anchorCorner='BOTTOM_LEFT'>
+					<div
+						class='menu pt-2 pb-2 flex flex-col'
+					>
+						<button class='list' on:click={() => newChannel()}>
+							New Channel
+						</button>
+						<button class='list' id='settings' on:click={() => {
 								shown = !shown;
 								surface.setOpen(false)
 									console.log(shown)
 							}}>Settings
-							</button>
-							<MenuDivider />
-							<button class='list l' on:click={() => {
+						</button>
+						<MenuDivider />
+						<button class='list l' on:click={() => {
 								supabase.auth.signOut().then(() => {location.reload()})
 							}}>Log out
-							</button>
-						</div>
-					</MenuSurface>
-				</div>
+						</button>
+					</div>
+				</MenuSurface>
 			</div>
-			<Search />
+		</div>
+		<Search />
+		<Channels />
+		<div class=' flex w-full new'>
+			<button on:click={() => newChannel()} class='w-full new-btn'>
+				New Channel
+			</button>
 		</div>
 	</div>
 {/if}
@@ -196,6 +225,31 @@
     width: 18%;
     min-width: 300px;
     background: #131c21;
+    transition: none;
+    height: 100vh;
+    border-right: 2px solid #2a3236;
+  }
+
+  .new {
+    position: absolute;
+    width: 18%;
+    min-width: 300px;
+    background: #131c21;
+    bottom: 0;
+
+    .new-btn {
+      border-top: 2px solid #2a3236;
+      color: white;
+			height: 60px !important;
+      &:hover {
+        color: #cccdcf;
+        background: #323739;
+      }
+
+      &:nth-child(1) {
+        border-right: 2px solid #2a3236;
+      }
+    }
   }
 
   .header {

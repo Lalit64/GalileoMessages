@@ -19,4 +19,9 @@
       -ms-overflow-style: none;  /* IE and Edge */
       scrollbar-width: none;  /* Firefox */
   }
+
+	body {
+			transition: none !important;
+			background: #252d33;
+	}
 </style>

@@ -795,6 +795,19 @@
     tslib "^2.3.1"
     typescript "^4.4.2"
 
+"@smui/common@^5.0.0-beta.7":
+  version "5.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@smui/common/-/common-5.0.0-beta.7.tgz#6e80313d5606ff431d00e7229788adf60dcc6437"
+  integrity sha512-TVLzD4Li93DFyNnUN/2lEubmIF0it/CeuNa4CWlNsK5ANiT+p8vo2SvRhkOUYH7Yvl6kdmd/XiPGk62r+4VnZQ==
+  dependencies:
+    "@material/dom" "^11.0.0"
+    "@tsconfig/svelte" "^2.0.1"
+    sass "~1.39.2"
+    svelte "^3.35.0"
+    svelte2tsx "^0.4.6"
+    tslib "^2.3.1"
+    typescript "^4.4.2"
+
 "@smui/data-table@5.0.0-beta.1":
   version "5.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/@smui/data-table/-/data-table-5.0.0-beta.1.tgz#9bdb6caa4ec21d887e71c45c327bd41e9f0da6db"
@@ -817,6 +830,17 @@
     "@material/dialog" "^11.0.0"
     "@material/dom" "^11.0.0"
     "@smui/common" "^5.0.0-beta.1"
+    svelte2tsx "^0.4.6"
+
+"@smui/dialog@^5.0.0-beta.7":
+  version "5.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@smui/dialog/-/dialog-5.0.0-beta.7.tgz#1af318edab2ac1afa94a7beac0eac7ea516f25f6"
+  integrity sha512-wzj6cCnKia8VPzOx+rX03/GglTgVrrKclLRJvLfXUI2ERGy/7Dnc4gQ+EkYki0EUNrJW5aTk0p3zlFGxpGaeZw==
+  dependencies:
+    "@material/button" "^11.0.0"
+    "@material/dialog" "^11.0.0"
+    "@material/dom" "^11.0.0"
+    "@smui/common" "^5.0.0-beta.7"
     svelte2tsx "^0.4.6"
 
 "@smui/drawer@5.0.0-beta.1", "@smui/drawer@^5.0.0-beta.1":
@@ -2902,6 +2926,11 @@ modern-normalize@^1.1.0:
   resolved "https://registry.yarnpkg.com/modern-normalize/-/modern-normalize-1.1.0.tgz#da8e80140d9221426bd4f725c6e11283d34f90b7"
   integrity sha512-2lMlY1Yc1+CUy0gw4H95uNN7vjbpoED7NNRSBHE25nWfLBdmMzFCsPshlzbxHz+gYMcBEUN8V4pU16prcdPSgA==
 
+moment@^2.29.1:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+
 mri@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/mri/-/mri-1.2.0.tgz#6721480fec2a11a4889861115a48b6cbe7cc8f0b"
@@ -3515,6 +3544,13 @@ sass@^1.32.11:
   version "1.41.0"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.41.0.tgz#f7b41dc00336a4c03429c37b9680b86758af61d4"
   integrity sha512-wb8nT60cjo9ZZMcHzG7TzdbFtCAmHEKWrH+zAdScPb4ZxL64WQBnGdbp5nwlenW5wJPcHva1JWmVa0h6iqA5eg==
+  dependencies:
+    chokidar ">=3.0.0 <4.0.0"
+
+sass@~1.39.2:
+  version "1.39.2"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.39.2.tgz#1681964378f58d76fc64a6a502619bd5ac99f660"
+  integrity sha512-4/6Vn2RPc+qNwSclUSKvssh7dqK1Ih3FfHBW16I/GfH47b3scbYeOw65UIrYG7PkweFiKbpJjgkf5CV8EMmvzw==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
 

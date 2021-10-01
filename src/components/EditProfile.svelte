@@ -115,7 +115,8 @@
   }
 
   h1 {
-    color: #009688;
+    color: #502ee0;
+
   }
 
   img {
@@ -125,7 +126,7 @@
   }
 
   input {
-    border-bottom: 1px solid #009688;
+    border-bottom: 1px solid #2f1794;
 
     &:focus {
       outline: 0;
@@ -134,18 +135,19 @@
 
   button {
     color: white;
-    background: #009688;
+    background: #2A1487;
 		&:hover {
-			background-color: darken(#009688, 5);
+			background-color: darken(#2A1487, 5);
 		}
 		&:active {
-      background-color: darken(#009688, 7);
+      background-color: darken(#2A1487, 7);
     }
   }
 
 
   ._3D1Iu {
     display: none;
+		transition: .5s;
   }
 
   .upload {
@@ -162,9 +164,11 @@
         margin-left: 20px;
         z-index: 1000000;
       }
-
+			::file-selector-button {
+        background-color: rgba(0,0,0,0.3);
+      }
 			._3D1Iu:hover{
-				color: transparent;
+				display: none;
 				fill: none !important;
 			}
     }

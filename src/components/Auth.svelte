@@ -95,14 +95,15 @@
 	}
 
 	input {
-			@apply rounded w-3/6 h-9 p-6 pl-4 m-3.5;
-			background: #3B4447;
+			@apply w-3/6 h-9 p-6 pl-4 m-3.5;
+			background: transparent;
 			color: #c1cbd4;
+			border-bottom: 2px solid #2f1794;
+			&:focus {
+				outline: none;
+			}
 	}
 
-	input:active {
-    background: linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
-  }
 
   .divider{
       background: #3B4447;
